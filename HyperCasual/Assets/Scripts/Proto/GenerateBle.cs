@@ -5,7 +5,7 @@ using UnityEngine;
 public class GenerateBle : MonoBehaviour
 {
     // Start is called before the first frame update
-    public GameObject ble;
+    public GameObject[] ble;
     public GameObject earth;
 
     public int meridiens;
@@ -25,21 +25,32 @@ public class GenerateBle : MonoBehaviour
 
     void generateBle()
     {
-        for (int x = 1; x < paralleles; x++)
+        for (int y = 0; y < paralleles; y++)
         {
-            for (int y = 1; y < meridiens; y++)
+            for (int x = 0; x < meridiens; x++)
             {
-                if (x < 5 || x > paralleles - 5)
+                if (y < 7)
                 {
-                    y+=4;
+                    x += (7 - y);
                 }
-                float phi = 2.0f * Mathf.PI * x / paralleles;
-                float theta = 2.0f * Mathf.PI * y / meridiens;
-                Vector3 pos = new Vector3(rayon * Mathf.Sin(phi) * Mathf.Cos(theta), rayon * Mathf.Sin(phi) * Mathf.Sin(theta), rayon * Mathf.Cos(phi));
-                Vector3 normal = pos - earth.transform.position;
+                if (y > paralleles - 7)
+                {
+                    x +=  (7 - (paralleles - y));
+                }
+                //x += (5 - y); 
+                float phi = Mathf.PI * y / paralleles;
+                float theta = 2.0f * Mathf.PI * x / meridiens;
 
-                GameObject bleInstance = Instantiate(ble, pos, Quaternion.identity);
+                Vector3 pos = new Vector3(rayon * Mathf.Sin(phi) * Mathf.Cos(theta), rayon * Mathf.Cos(phi), rayon * Mathf.Sin(phi) * Mathf.Sin(theta));
+                pos += new Vector3(Random.Range(-0.10f, 0.10f), Random.Range(-0.10f, 0.10f), Random.Range(-0.10f, 0.10f));
+
+                Vector3 normal = pos - earth.transform.position;
+                int radmBle = Random.Range(0, 3);
+                GameObject bleInstance = Instantiate(ble[radmBle], pos, Quaternion.identity);
                 bleInstance.transform.up = normal;
+
+                bleInstance.transform.Rotate(new Vector3(0, 1, 0), Random.Range(0.0f, 360.0f));
+
             }
         }
     }
