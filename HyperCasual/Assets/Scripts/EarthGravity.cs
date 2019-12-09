@@ -7,7 +7,7 @@ public class EarthGravity : MonoBehaviour
     // Singleton
     public static EarthGravity instance;
     public float gravity = -10.0f;
-    public SphereCollider collider;
+    public new SphereCollider collider;
 
     void Awake()
     {
